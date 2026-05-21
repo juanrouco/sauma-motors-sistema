@@ -10,7 +10,7 @@
 - Class files: `class.{entityname}.php` (all lowercase, singular for entity definition, plural for data access)
 - Examples: `class.acreedor.php`, `class.acreedores.php`, `class.db.php`
 - Admin pages: `{entities}.php`, `{entities}_add.php`, `{entities}_mod.php`, `{entities}_del.php`
-- Modules: `{name}.php` in `modules/`
+- Modules: `{name}.php` in `src/modules/`
 
 **Functions:**
 - Global utility functions: PascalCase with uppercase first letter (`FormatDate`, `CantidadDiasPasados`, `IsEmail`)
@@ -38,7 +38,7 @@
 - Line breaks: DOS line endings in some files, Unix in others
 
 **Spacing:**
-- Assignment operators aligned with tabs in declarations (see aligned `=` in `_admin_/acreedores_add.php`)
+- Assignment operators aligned with tabs in declarations (see aligned `=` in `src/_admin_/acreedores_add.php`)
 - Spaces around operators in conditionals
 - No trailing semicolon enforcement
 
@@ -56,7 +56,7 @@
 3. Filter/pagination helpers (`class.filter.php`, `class.page.php`)
 4. Interfaces at end if implemented
 
-**Example from `library/class.acreedores.php`:**
+**Example from `src/library/class.acreedores.php`:**
 ```php
 <?php
 require_once('class.db.php');
@@ -75,7 +75,7 @@ class Acreedores extends DBAccess implements IFilterable
 ```
 
 **Autoloading:**
-- Magic `__autoload()` function in `inc_library.php` automatically loads classes
+- Magic `__autoload()` function in `src/inc_library.php` automatically loads classes
 - Converts class name to lowercase file path: `ClassName` → `../library/class.classname.php`
 
 ## Error Handling
@@ -83,7 +83,7 @@ class Acreedores extends DBAccess implements IFilterable
 **Patterns:**
 - **Return-based errors**: Methods return `false` on failure, entity objects/arrays on success
 - **Exceptions**: Limited use, only in critical paths (`class.db.php` throws exceptions on SQL errors)
-- **Error flags**: Bitmask pattern in forms (see `_admin_/acreedores_add.php`):
+- **Error flags**: Bitmask pattern in forms (see `src/_admin_/acreedores_add.php`):
   ```php
   $err = 0;
   if ($NumeroInscripcion == '')
@@ -95,7 +95,7 @@ class Acreedores extends DBAccess implements IFilterable
   ```
 
 **Error Class:**
-- Hardcoded error messages in `library/class.error.php` as constants
+- Hardcoded error messages in `src/library/class.error.php` as constants
 - HTML-formatted error strings with color styling
 
 **Exception Usage:**
@@ -107,7 +107,7 @@ class Acreedores extends DBAccess implements IFilterable
 **Framework:** PHP built-in logging, no external framework
 
 **Patterns:**
-- Database logging via `LogsDB` class in `library/class.logsdb.php`
+- Database logging via `LogsDB` class in `src/library/class.logsdb.php`
 - Logs table: `TB_LogsDB` with fields: `Idlog`, `Fecha`, `IdUsuario`, `Accion`, `Tabla`, `Id`, `EstadoPrevio`, `EstadoActual`
 - Log entries record: timestamp, user ID, action type, affected table, record ID, before/after state
 - Activity tracking for all CRUD operations on critical entities
@@ -125,7 +125,7 @@ class Acreedores extends DBAccess implements IFilterable
 - Inline comments: `// text` for single-line notes
 - Spanish and English mixed throughout codebase
 
-**Example from `_admin_/acreedores_add.php`:**
+**Example from `src/_admin_/acreedores_add.php`:**
 ```php
 /* obtiene datos del formulario */
 $IdTipoPersona = intval($_REQUEST['IdTipoPersona']);
@@ -152,7 +152,7 @@ if ($Submit) { ... }
 - Query methods return result objects that support iteration: `while ($oRow = $oRes->GetRow())`
 - Collection methods return PHP arrays of entity objects
 
-**Example from `library/class.acreedores.php`:**
+**Example from `src/library/class.acreedores.php`:**
 ```php
 public function GetAll(array $filter = NULL, Page $oPage = NULL)
 {
@@ -188,7 +188,7 @@ public function GetAll(array $filter = NULL, Page $oPage = NULL)
 - No barrel files (index files) used
 - Direct class imports required
 
-**Module Example from `modules/acreedores.php`:**
+**Module Example from `src/modules/acreedores.php`:**
 ```php
 <?php
 require_once('../library/class.acreedores.php');
@@ -233,7 +233,7 @@ class ModuleAcreedores
 - Element manipulation: `Element.show()`, `Element.hide()`, `Element.observe()`
 - Event handling: `object.observe('event', handler)`
 
-**Example from `_admin_/acreedores.php`:**
+**Example from `src/_admin_/acreedores.php`:**
 ```javascript
 function SetPage(Page)
 {
@@ -267,7 +267,7 @@ function Filtrar()
 - Submitted flag: `$Submit = (isset($_REQUEST['Submitted']))`
 
 **AJAX Requests:**
-- Endpoint: `xml/xmlhelper.php`
+- Endpoint: `src/xml/xmlhelper.php`
 - Request parameters: `?module=ModuleName&command=CommandName&param1=value1`
 - Response format: XML by default, HTML if `?html=1` param passed
 - Request function: `SendXMLRequest(module, command, callback, params)`
@@ -275,7 +275,7 @@ function Filtrar()
 **Session/Security:**
 - All pages check authentication: `Session::ForceLogin()`
 - Permission checks: `if (!Session::CheckPerm(PERM_PERMISSION_CODE)) Session::NoPerm()`
-- Permissions defined as constants in `inc_perms.php`
+- Permissions defined as constants in `src/inc_perms.php`
 
 ---
 

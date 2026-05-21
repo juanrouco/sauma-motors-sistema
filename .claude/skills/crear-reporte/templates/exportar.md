@@ -1,6 +1,6 @@
 ﻿# Template: Archivo de exportacion CSV/XLS
 
-**Destino:** `_admin_/{entidad}_reporte_exportar.php`
+**Destino:** `src/_admin_/{entidad}_reporte_exportar.php`
 
 ## Placeholders a reemplazar
 
@@ -14,7 +14,7 @@
 
 ```php
 <?php
-// _admin_/{entidad}_reporte_exportar.php
+// src/_admin_/{entidad}_reporte_exportar.php
 chdir(dirname(__FILE__));
 require_once('../inc_library.php');
 
@@ -34,6 +34,6 @@ exit();
 ## Notas
 
 - Los filtros deben ser exactamente los mismos que recibe `$strParams` en el reporte principal.
-- El metodo `ExportReporteCsv` esta en la clase de acceso a datos (`library/class.{entidades}.php`). Si no existe, hay que crearlo.
+- El metodo `ExportReporteCsv` esta en la clase de acceso a datos (`src/library/class.{entidades}.php`). Si no existe, hay que crearlo.
 - El metodo tipicamente envia headers HTTP para forzar descarga y escribe CSV/XLS al output.
 - Usar `chdir(dirname(__FILE__))` al inicio para que los `require_once` relativos funcionen cuando se ejecuta por CLI.

@@ -23,7 +23,7 @@ A partir del nombre recibido en `$ARGUMENTS`, derivar:
 
 ## 2. Crear tabla MySQL
 
-Generar el script SQL y agregarlo a `sql/cambios-basedatos.sql`:
+Generar el script SQL y agregarlo a `src/sql/cambios-basedatos.sql`:
 
 ```sql
 CREATE TABLE TB_{Plural} (
@@ -39,11 +39,11 @@ CREATE TABLE TB_{Plural} (
 - Charset siempre `latin1`
 - Primary key: `Id{Singular}` con `AUTO_INCREMENT`
 - Foreign keys: nombrar como `FK_{Tabla}_{Campo}`
-- Ejecutar: `docker exec -i sauma_db mysql -uroot benelli_com_ar < sql/cambios-basedatos.sql`
+- Ejecutar: `docker exec -i sauma_db mysql -uroot benelli_com_ar < src/sql/cambios-basedatos.sql`
 
 ## 3. Crear clase entidad
 
-Archivo: `library/class.{singular_minusculas}.php`
+Archivo: `src/library/class.{singular_minusculas}.php`
 
 - Una propiedad pública por cada columna de la tabla
 - Constructor que inicializa todos los valores por defecto (0 para IDs, '' para strings, null para opcionales)
@@ -53,7 +53,7 @@ Ver [examples/acreedor-example.md](examples/acreedor-example.md) para el ejemplo
 
 ## 4. Crear clase de acceso a datos
 
-Archivo: `library/class.{plural_minusculas}.php`
+Archivo: `src/library/class.{plural_minusculas}.php`
 
 - Extender `DBAccess`
 - `require_once` del archivo de entidad y `class.dbaccess.php`
@@ -65,13 +65,13 @@ Ver [examples/acreedor-example.md](examples/acreedor-example.md) para el ejemplo
 
 ## 5. Verificaciones finales
 
-- [ ] El archivo de entidad está en `library/` con nombre correcto
-- [ ] El archivo de acceso a datos está en `library/` con nombre correcto
+- [ ] El archivo de entidad está en `src/library/` con nombre correcto
+- [ ] El archivo de acceso a datos está en `src/library/` con nombre correcto
 - [ ] La clase de datos extiende `DBAccess`
 - [ ] Los `require_once` apuntan a los archivos correctos
 - [ ] La tabla usa `ENGINE=InnoDB DEFAULT CHARSET=latin1`
 - [ ] La primary key sigue la convención `Id{Singular}`
-- [ ] El script SQL se agregó a `sql/cambios-basedatos.sql`
+- [ ] El script SQL se agregó a `src/sql/cambios-basedatos.sql`
 
 ## 6. Siguiente paso
 

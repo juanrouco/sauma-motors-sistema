@@ -1,6 +1,6 @@
 ﻿# Layout base para páginas ABM
 
-Estructura HTML estándar que deben seguir todas las páginas del panel `_admin_/`.
+Estructura HTML estándar que deben seguir todas las páginas del panel `src/_admin_/`.
 
 ## Estructura general
 
@@ -41,4 +41,4 @@ Session::Initialize();
 - El charset del HTML es `iso-8859-1` (consistente con `latin1` de la BD)
 - Prototype.js se carga antes que jQuery
 - jQuery se usa siempre via `$j`, nunca `$`
-- Revisar las páginas ABM existentes en `_admin_/` para copiar la estructura de includes y header/footer que ya use el proyecto
+- Revisar las páginas ABM existentes en `src/_admin_/` para copiar la estructura de includes y header/footer que ya use el proyecto

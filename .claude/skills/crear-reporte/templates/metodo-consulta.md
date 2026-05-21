@@ -1,6 +1,6 @@
 ﻿# Template: Metodo de consulta en clase de acceso a datos
 
-**Destino:** Agregar metodos a `library/class.{entidades}.php`
+**Destino:** Agregar metodos a `src/library/class.{entidades}.php`
 
 Se necesitan tipicamente 2 metodos: uno para obtener totales/resumen y otro para parsear el filtro (si la clase no tiene `ParseFilter` propio).
 

@@ -12,11 +12,11 @@ Generar un módulo para el sistema de xmlhelper que maneja las peticiones AJAX d
 
 ## 1. Cómo funciona el sistema AJAX
 
-El archivo `xml/xmlhelper.php` actúa como endpoint central. Recibe requests con un nombre de módulo y un comando, carga el módulo correspondiente desde `modules/` y ejecuta el método indicado.
+El archivo `src/xml/xmlhelper.php` actúa como endpoint central. Recibe requests con un nombre de módulo y un comando, carga el módulo correspondiente desde `src/modules/` y ejecuta el método indicado.
 
 ## 2. Crear el archivo del módulo
 
-Archivo: `modules/module.{nombre_minusculas}.php`
+Archivo: `src/modules/module.{nombre_minusculas}.php`
 
 ```php
 <?php
@@ -88,7 +88,7 @@ Ver [examples/module-example.md](examples/module-example.md) para un ejemplo com
 
 ## 6. Verificaciones finales
 
-- [ ] El archivo está en `modules/` con nombre `module.{nombre}.php`
+- [ ] El archivo está en `src/modules/` con nombre `module.{nombre}.php`
 - [ ] La clase se llama `Module{Nombre}` (PascalCase)
 - [ ] Cada comando es un método público que recibe `$params`
 - [ ] Los `require_once` necesarios están incluidos si se usan clases externas

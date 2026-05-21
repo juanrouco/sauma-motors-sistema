@@ -2,7 +2,7 @@
 
 Este archivo sirve como referencia del patrón a seguir para toda nueva entidad.
 
-## Clase Entidad (`library/class.acreedor.php`)
+## Clase Entidad (`src/library/class.acreedor.php`)
 
 ```php
 <?php
@@ -46,7 +46,7 @@ class Acreedor
 ?>
 ```
 
-## Clase Acceso a Datos (`library/class.acreedores.php`)
+## Clase Acceso a Datos (`src/library/class.acreedores.php`)
 
 ```php
 <?php

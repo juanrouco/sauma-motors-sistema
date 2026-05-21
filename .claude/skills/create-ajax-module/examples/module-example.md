@@ -2,7 +2,7 @@
 
 Ejemplo completo de un módulo con múltiples comandos.
 
-## Archivo PHP (`modules/module.clientes.php`)
+## Archivo PHP (`src/modules/module.clientes.php`)
 
 ```php
 <?php

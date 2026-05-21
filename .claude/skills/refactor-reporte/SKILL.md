@@ -9,7 +9,7 @@ Audita un archivo de reporte contra las reglas del sistema y genera un plan de c
 
 ## Input
 
-El usuario debe indicar el archivo a auditar. Ejemplo: `/refactor-reporte _admin_/ordenestrabajo_reporte.php`
+El usuario debe indicar el archivo a auditar. Ejemplo: `/refactor-reporte src/_admin_/ordenestrabajo_reporte.php`
 
 Si no indica archivo, preguntar cual reporte quiere auditar.
 
@@ -19,7 +19,7 @@ Si no indica archivo, preguntar cual reporte quiere auditar.
 
 1. Leer el archivo de reporte indicado.
 2. Identificar la clase de acceso a datos que usa (buscar las instancias `new XxxEntidades()`).
-3. Leer los metodos de consulta relevantes en `library/class.{entidades}.php` (buscar `GetTotalReporte`, `GetAllReporte`, `ParseFilter`, etc.).
+3. Leer los metodos de consulta relevantes en `src/library/class.{entidades}.php` (buscar `GetTotalReporte`, `GetAllReporte`, `ParseFilter`, etc.).
 4. Si existe archivo de exportacion asociado (`*_exportar.php`), leerlo tambien.
 
 ### Paso 2: Ejecutar checklist de auditoria
@@ -99,8 +99,8 @@ Generar un documento `.planning/REFACTOR-{ENTIDAD}-REPORTE.md` con esta estructu
 ```markdown
 # Refactoring: {archivo}
 
-**Archivo principal:** `_admin_/{archivo}`
-**Archivo backend:** `library/class.{entidades}.php`
+**Archivo principal:** `src/_admin_/{archivo}`
+**Archivo backend:** `src/library/class.{entidades}.php`
 **Fecha:** {fecha}
 
 ---

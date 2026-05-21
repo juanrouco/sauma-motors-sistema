@@ -1,12 +1,12 @@
 ﻿# Template: Pagina de reporte
 
-**Destino:** `_admin_/{entidad}_reporte.php`
+**Destino:** `src/_admin_/{entidad}_reporte.php`
 
 ## Placeholders a reemplazar
 
 | Placeholder | Reemplazar por | Ejemplo |
 |-------------|---------------|---------|
-| `PERM_XXXX_LIST` | Permiso real de `inc_perms.php` | `PERM_ARTI_LIST` |
+| `PERM_XXXX_LIST` | Permiso real de `src/inc_perms.php` | `PERM_ARTI_LIST` |
 | `MiEntidades` | Clase de acceso a datos (plural) | `StockMovimientos` |
 | `MiReporte` | Titulo visible del reporte | `Reporte de Movimientos de Stock` |
 | `mireporte_exportar.php` | Nombre del archivo de exportacion | `stockmovimientos_exportar.php` |

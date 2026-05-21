@@ -13,7 +13,7 @@ Pregunta al usuario:
 2. **Que filtros necesita** (ej: fecha desde/hasta, ubicacion, modelo, proveedor)
 3. **Que columnas/totales muestra** (ej: costos por proveedor, cantidades, rentabilidad)
 4. **Si necesita exportacion a XLS/CSV**
-5. **Que permiso de `inc_perms.php` aplica** (ej: `PERM_ARTI_LIST`, `PERM_TALL_REPORTES`)
+5. **Que permiso de `src/inc_perms.php` aplica** (ej: `PERM_ARTI_LIST`, `PERM_TALL_REPORTES`)
 
 ## Arquitectura
 
@@ -21,9 +21,9 @@ Cada reporte se compone de hasta 3 archivos:
 
 | Archivo | Template | Funcion |
 |---------|----------|---------|
-| `_admin_/{entidad}_reporte.php` | `templates/reporte.md` | Pagina principal con filtros y tabla |
-| `_admin_/{entidad}_reporte_exportar.php` | `templates/exportar.md` | Exportacion CSV/XLS (opcional) |
-| `library/class.{entidades}.php` | `templates/metodo-consulta.md` | Metodo(s) de consulta SQL |
+| `src/_admin_/{entidad}_reporte.php` | `templates/reporte.md` | Pagina principal con filtros y tabla |
+| `src/_admin_/{entidad}_reporte_exportar.php` | `templates/exportar.md` | Exportacion CSV/XLS (opcional) |
+| `src/library/class.{entidades}.php` | `templates/metodo-consulta.md` | Metodo(s) de consulta SQL |
 
 ## Proceso
 

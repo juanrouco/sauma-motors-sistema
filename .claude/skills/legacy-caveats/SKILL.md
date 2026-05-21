@@ -1,4 +1,4 @@
----
+﻿---
 name: legacy-caveats
 description: Gotchas y restricciones críticas del stack legacy PHP 5.6 del DMS. Cargar automáticamente al trabajar con código PHP o JavaScript del proyecto para evitar errores comunes.
 user-invocable: false
@@ -20,7 +20,7 @@ Estas reglas son críticas y deben respetarse **siempre** al escribir o modifica
 - **Sin array destructuring**: no usar `[$a, $b] = $arr`. Usar `list($a, $b) = $arr`
 - **Sin anonymous classes**: no existen en PHP 5.6
 - **Sin `strict_types`**: no usar `declare(strict_types=1)`
-- **Autoload legacy**: la función `__autoload` en `inc_library.php` carga clases desde `library/`
+- **Autoload legacy**: la función `__autoload` en `src/inc_library.php` carga clases desde `src/library/`
 
 ## MySQL y SQL
 
@@ -42,8 +42,8 @@ Estas reglas son críticas y deben respetarse **siempre** al escribir o modifica
 
 - **Archivos PHP**: sin BOM, sin espacios antes de `<?php`
 - **Charset en HTML**: usar `charset="iso-8859-1"` (consistente con `latin1`)
-- **Paths**: todos los includes son relativos. Los archivos en `_admin_/` usan `../` para subir a la raíz del repo
-- **Iniciar siempre con**: `require_once('../inc_library.php')` en páginas de `_admin_/`, o `require_once('inc_library.php')` desde la raíz
+- **Paths**: todos los includes son relativos. Los archivos en `src/_admin_/` usan `../` para subir a `src/`
+- **Iniciar siempre con**: `require_once('../inc_library.php')` en páginas de `src/_admin_/`, o `require_once('inc_library.php')` desde `src/`
 
 ## Errores comunes a evitar
 

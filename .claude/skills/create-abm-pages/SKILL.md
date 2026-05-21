@@ -8,21 +8,21 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 
 # Crear ABM: $ARGUMENTS
 
-Generar las páginas de administración para la entidad `$ARGUMENTS` en `_admin_/`.
+Generar las páginas de administración para la entidad `$ARGUMENTS` en `src/_admin_/`.
 
 ## 1. Prerequisitos
 
 Antes de generar las páginas, verificar que existan:
 
-- La clase entidad en `library/class.{singular}.php`
-- La clase de acceso a datos en `library/class.{plural}.php`
+- La clase entidad en `src/library/class.{singular}.php`
+- La clase de acceso a datos en `src/library/class.{plural}.php`
 - La tabla `TB_{Plural}` en la base de datos
 
 Si no existen, sugerir al usuario que ejecute primero `/create-entity`.
 
 ## 2. Archivos a generar
 
-Todos en `_admin_/` con nombres en minúsculas usando el plural de la entidad:
+Todos en `src/_admin_/` con nombres en minúsculas usando el plural de la entidad:
 
 | Archivo | Función | Obligatorio |
 |---------|---------|:-----------:|
@@ -137,7 +137,7 @@ Incluir:
 
 ## 7. Permisos y menú
 
-- Si la entidad requiere permisos, agregar la constante en `inc_perms.php`
+- Si la entidad requiere permisos, agregar la constante en `src/inc_perms.php`
 - Si corresponde, agregar la entrada al menú de navegación
 
 ## 8. Verificaciones finales

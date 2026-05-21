@@ -31,9 +31,9 @@
 
 **Core:**
 - Custom MVC-like framework (in-house implementation)
-  - Entry point: `index.php`
-  - Library base: `library/` with class files
-  - Admin pages: `_admin_/` (CRUD interfaces)
+  - Entry point: `src/index.php`
+  - Library base: `src/library/` with class files
+  - Admin pages: `src/_admin_/` (CRUD interfaces)
 
 **Frontend:**
 - jQuery 1.6.2, 1.7.0 - DOM manipulation and AJAX (uses `$j` operator)
@@ -48,7 +48,7 @@
 
 **Excel/Data Export:**
 - PHPExcel - Excel file generation and parsing
-- Custom XLS export classes in `library/excel_export/`
+- Custom XLS export classes in `src/library/excel_export/`
 
 **Build/Dev:**
 - Docker - Containerized environment
@@ -58,37 +58,37 @@
 
 **Critical:**
 - WSpooler (IFDRIVERS) - Print spooler integration for fiscal printers
-  - Location: `library/WSpooler/`
+  - Location: `src/library/WSpooler/`
   - Purpose: Network communication with fiscal devices
 - NuSOAP - SOAP client for web services
-  - Location: `library/class.nusoap.php`
+  - Location: `src/library/class.nusoap.php`
   - Purpose: AFIP integration and other WS calls
 
 **Infrastructure:**
 - PEAR/Mail - Email transmission via SMTP
-  - Location: `library/mail/`
+  - Location: `src/library/mail/`
   - Configuration: Gmail SMTP (hardcoded in config)
 - phpseclib - SSH/SFTP and cryptography
-  - Location: `library/phpseclib/`
+  - Location: `src/library/phpseclib/`
   - Purpose: Secure file transfers and encryption
 - phmagick - ImageMagick wrapper
-  - Location: `library/phmagick/`
+  - Location: `src/library/phmagick/`
   - Purpose: Image manipulation
 - Barcode generation - Custom barcode library
-  - Location: `library/barcodegen/`
+  - Location: `src/library/barcodegen/`
 
 **Data Processing:**
 - PHPExcel - Excel read/write
-  - Location: `library/PHPExcel/`
+  - Location: `src/library/PHPExcel/`
 - Excel export utility - Custom export classes
-  - Location: `library/excel_export/`
+  - Location: `src/library/excel_export/`
 - Excel reader - Custom Excel parsing
-  - Location: `library/excel_reader/`
+  - Location: `src/library/excel_reader/`
 
 ## Configuration
 
 **Environment:**
-- Configuration stored in `library/class.config.php` (generated from `class.config.php.example`)
+- Configuration stored in `src/library/class.config.php` (generated from `class.config.php.example`)
 - No `.env` file support - all config is hardcoded PHP constants
 - Critical configs:
   - Database credentials (host, user, pass, database name)
