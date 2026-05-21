@@ -20,9 +20,9 @@ class Config
 	const UrlSitio = 'http://192.168.1.100';			
 	/* Url con el directorio del sitio en ingles */
 	const UrlSitioEnglish = 'http://192.168.1.100/_admin_/';	
-	/* Url con el directorio del sitio en español */
+	/* Url con el directorio del sitio en espaï¿½ol */
 	const UrlSitioEspanol = 'http://192.168.1.100/_admin_/';	
-	/* Directorio de la imagen que irá por default cuando no haya una imagen cargada */	
+	/* Directorio de la imagen que irï¿½ por default cuando no haya una imagen cargada */	
 	const ImagenDefault	= 'images/no_foto.jpg';								
 	/* Correo electronico del administrador */
 	const CorreoAdministrador = 'info@grupotolosa.com.ar';								
@@ -37,11 +37,11 @@ class Config
 
 	/*------------------------ Configuracion Base de Datos -----------------------*/
 	
-	/* Host para la conexión a la base de datos */
-	const Database_Host	= 'localhost';		
+	/* Host para la conexiï¿½n a la base de datos */
+	const Database_Host	= 'db';
 	/* Nombre de usuario para conectarse a la base de datos */	
 	const Database_User	= 'root';	
-	/* Contraseña para conectarse a la base de datos */		
+	/* Contraseï¿½a para conectarse a la base de datos */		
 	const Database_Pass	= '';		
 	/* Nombre de la base de datos */	
 	const Database_Name	= 'benelli_com_ar';
