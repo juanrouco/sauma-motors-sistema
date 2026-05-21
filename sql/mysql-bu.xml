@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job version="9.0">
+<exportjob>
+<source>
+<host>localhost</host>
+<user>root</user>
+<pwd></pwd>
+<port>3306</port>
+
+<compressed>1</compressed>
+<ssl>0</ssl>
+<sslauth>0</sslauth>
+<clientkey></clientkey>
+<clientcert></clientcert>
+<cacert></cacert>
+<cipher></cipher>
+<charset></charset>
+</source>
+<export>
+<databases all="no">
+<database name = "benelli_com_ar">
+<objects all="yes">
+</objects>
+</database>
+</databases>
+<script compress="yes" fileordir="file" timestampdir="" timestamp="no">C:\wamp\www\sql\bu.zip</script>
+</export>
+<options>
+<createdb>yes</createdb>
+<usedb>yes</usedb>
+<dropobjects>yes</dropobjects>
+<bulkinsert>yes</bulkinsert>
+<completeinsert>no</completeinsert>
+<insertdelayed>no</insertdelayed>
+<flushlogs>no</flushlogs>
+<flushmaster>no</flushmaster>
+<flushslave>no</flushslave>
+<locktableread>no</locktableread>
+<singletransaction>no</singletransaction>
+<disablekeys>no</disablekeys>
+<locktablewrite>no</locktablewrite>
+<fkchecks>yes</fkchecks>
+<autocommit>no</autocommit>
+<usecharset>utf8</usecharset>
+<bulksize>0</bulksize>
+<appendtofile>no</appendtofile>
+</options>
+<abortonerror>no</abortonerror>
+<sendreport send="no" /></exportjob>
+</job>

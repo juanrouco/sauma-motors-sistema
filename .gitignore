@@ -1,0 +1,22 @@
+
+_admin_/_9570CD6A-8EC5-4CEA-AF56-65AEECAE708A-4222-00006B9B12F7556F
+_recursos/comprobantes/factura *.pdf
+_recursos/modelos/*.xls
+_recursos/unidades/*.xls
+_recursos/unidades/*.xlt
+_recursos/unidades/*.txt
+_recursos/unidades/archivos/*.xlsx
+_recursos/unidades/archivos/*.xls
+_recursos/unidades/*.xlsx
+_recursos/modelos/*.xlsx
+_recursos/ordentrabajo/imagenes/big/*.jpg
+_recursos/ordentrabajo/imagenes/thumb/*.jpg
+_recursos/colores/imagenes/thumb/*.jpg
+_recursos/colores/imagenes/big/*.jpg
+_recursos/archivos/*.csv
+*.bak
+library/mpdf/examples/*
+PEAR/cache/*
+.tmp.drivedownload/*
+_recursos/archivos/*.xlsx
+.tmp.driveupload/*
