@@ -1,28 +1,40 @@
 
-_admin_/_9570CD6A-8EC5-4CEA-AF56-65AEECAE708A-4222-00006B9B12F7556F
-_recursos/comprobantes/factura *.pdf
-_recursos/modelos/*.xls
-_recursos/unidades/*.xls
-_recursos/unidades/*.xlt
-_recursos/unidades/*.txt
-_recursos/unidades/archivos/*.xlsx
-_recursos/unidades/archivos/*.xls
-_recursos/unidades/*.xlsx
-_recursos/modelos/*.xlsx
-_recursos/ordentrabajo/imagenes/big/*.jpg
-_recursos/ordentrabajo/imagenes/thumb/*.jpg
-_recursos/colores/imagenes/thumb/*.jpg
-_recursos/colores/imagenes/big/*.jpg
-_recursos/archivos/*.csv
+src/_admin_/_9570CD6A-8EC5-4CEA-AF56-65AEECAE708A-4222-00006B9B12F7556F
+src/_recursos/comprobantes/factura *.pdf
+src/_recursos/modelos/*.xls
+src/_recursos/unidades/*.xls
+src/_recursos/unidades/*.xlt
+src/_recursos/unidades/*.txt
+src/_recursos/unidades/archivos/*.xlsx
+src/_recursos/unidades/archivos/*.xls
+src/_recursos/unidades/*.xlsx
+src/_recursos/modelos/*.xlsx
+src/_recursos/ordentrabajo/imagenes/big/*.jpg
+src/_recursos/ordentrabajo/imagenes/thumb/*.jpg
+src/_recursos/colores/imagenes/thumb/*.jpg
+src/_recursos/colores/imagenes/big/*.jpg
+src/_recursos/archivos/*.csv
 *.bak
-library/mpdf/examples/*
-PEAR/cache/*
+src/library/mpdf/examples/*
+src/PEAR/cache/*
+src/.tmp.drivedownload/*
 .tmp.drivedownload/*
-_recursos/archivos/*.xlsx
+src/_recursos/archivos/*.xlsx
 .tmp.driveupload/*
+src/.tmp.driveupload/*
 
 # Dumps de base (datos reales, nunca al repo)
 src/sql/init/*.sql
 
 # Logs y cola de reintentos de la integracion CFMOTO (runtime)
 src/_recursos/cfmoto/
+src/_recursos/archivos/*
+src/_recursos/colores/imagenes/big/*
+src/_recursos/colores/imagenes/thumb/*
+src/_recursos/comprobantes/factura *.pdf
+src/_recursos/modelos/*
+src/_recursos/ordentrabajo/imagenes/big/*
+src/_recursos/ordentrabajo/imagenes/thumb/*
+src/_recursos/unidades/*
+src/_recursos/archivos/web.pdf
+src/_recursos/archivos/web.pdf
