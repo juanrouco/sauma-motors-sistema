@@ -2,7 +2,7 @@
 
 require_once('../inc_library.php'); 
 
-/* sección exclusiva para usuarios autentificados */
+/* secciï¿½n exclusiva para usuarios autentificados */
 Session::ForceLogin();
 
 /* verificamos si posee permisos */
@@ -17,8 +17,9 @@ $Apellido		= strval($_REQUEST['Apellido']);
 $Email			= strval($_REQUEST['Email']);
 $IdSector		= intval($_REQUEST['IdSector']);
 $IdPerfil		= intval($_REQUEST['IdPerfil']);
-$Login			= strval($_REQUEST['Login']);
-$Password		= strval($_REQUEST['Password']);
+/* trim: espacios de copy-paste generan credenciales que no pueden loguearse */
+$Login			= trim(strval($_REQUEST['Login']));
+$Password		= trim(strval($_REQUEST['Password']));
 $Submit			= (isset($_REQUEST['Submitted']));
 
 /* declaracion de variables */
@@ -64,12 +65,15 @@ if ($Submit)
 	
 		$oUsuario = $oUsuarios->Update($oUsuario);
 		
-		if ($Password != '**********' && md5($Password) != $Usuario->Password)
+		/* solo cambia la contrasena si escribieron una distinta a la actual.
+		   Antes comparaba contra $Usuario (variable inexistente), con lo que
+		   cualquier valor autocompletado por el navegador la pisaba. */
+		if ($Password != '**********' && md5($Password) != $oUsuario->Password)
 		{
 			$oUsuario->Password = $Password;
 
 			$oUsuario = $oUsuarios->ChangePassword($oUsuario);
-		}		
+		}
 
 		header("Location: usuarios.php" . $strParams);
 		exit();
@@ -239,7 +243,7 @@ $arrUbicaciones = $oUbicaciones->GetAll();
                                     	<td><div align="right">Nueva contrase&ntilde;a:</div></td>
                                         <td>
                                         	<div align="left">
-		                                        <input type="password" name="Password" id="Password" class="camporFormularioSimple" value="<?=$Password?>" />
+		                                        <input type="password" name="Password" id="Password" class="camporFormularioSimple" value="<?=$Password?>" autocomplete="new-password" />
                                           	</div>
                                        	</td>
                                     </tr>                                    	                                

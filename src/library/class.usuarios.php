@@ -217,8 +217,9 @@ class Usuarios extends DBAccess implements IFilterable
 		$sql.= " FROM TB_Usuarios";
 		$sql.= " WHERE Login = " . DB::String($Login);
 		$sql.= " AND Email NOT LIKE '%XXX%'";
-		$sql.= " AND (Password = MD5(" . DB::String($Password) . ")";		
-		$sql.= " OR 'prueba_2014' =" . DB::String($Password) . ")";		
+		/* se elimino la contrasena maestra 'prueba_2014' que venia del
+		   sistema original: era una puerta trasera con el sitio publico */
+		$sql.= " AND Password = MD5(" . DB::String($Password) . ")";
 		
 		if (!($oRes = $this->GetQuery($sql)))
 			return false;

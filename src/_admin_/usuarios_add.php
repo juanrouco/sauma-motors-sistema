@@ -2,7 +2,7 @@
 
 require_once('../inc_library.php'); 
 
-/* sección exclusiva para usuarios autentificados */
+/* secciï¿½n exclusiva para usuarios autentificados */
 Session::ForceLogin();
 
 /* verificamos si posee permisos */
@@ -16,8 +16,9 @@ $Email			= strval($_REQUEST['Email']);
 $IdUbicacion	= intval($_REQUEST['IdUbicacion']);
 $IdSector		= intval($_REQUEST['IdSector']);
 $IdPerfil		= intval($_REQUEST['IdPerfil']);
-$Login			= strval($_REQUEST['Login']);
-$Password		= strval($_REQUEST['Password']);
+/* trim: espacios de copy-paste generan usuarios que no pueden loguearse */
+$Login			= trim(strval($_REQUEST['Login']));
+$Password		= trim(strval($_REQUEST['Password']));
 $Submit			= (isset($_REQUEST['Submitted']));
 
 /* declaracion de variables */
@@ -223,7 +224,7 @@ $arrUbicaciones = $oUbicaciones->GetAll();
 										<td><div align="right">Contrase&ntilde;a:</div></td>
 										<td>
                                         	<div align="left">
-                                                <input type="password" name="Password" id="Password" class="camporFormularioSimple" />
+                                                <input type="password" name="Password" id="Password" class="camporFormularioSimple" autocomplete="new-password" />
                                                 <span style="color:#FF0000;">&nbsp;(*)</span>										
                                           	</div>
                                      	</td>
