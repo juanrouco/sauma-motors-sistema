@@ -11,8 +11,9 @@ $Submit = isset($_REQUEST['Submitted']) ? $_REQUEST['Submitted'] : "";
 
 if ($Submit)
 {
-	$User = ((isset($_REQUEST['User']) && (!empty($_REQUEST['User'])))) ? $_REQUEST['User'] : "";
-	$Pass = ((isset($_REQUEST['Pass']) && (!empty($_REQUEST['Pass'])))) ? $_REQUEST['Pass'] : "";
+	/* trim: un espacio al copiar/pegar o tipear hacia fallar el login */
+	$User = ((isset($_REQUEST['User']) && (!empty($_REQUEST['User'])))) ? trim($_REQUEST['User']) : "";
+	$Pass = ((isset($_REQUEST['Pass']) && (!empty($_REQUEST['Pass'])))) ? trim($_REQUEST['Pass']) : "";
 
 	if ((trim($User) != "") && (trim($Pass) != ""))
 	{
