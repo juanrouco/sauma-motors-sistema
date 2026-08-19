@@ -1,7 +1,16 @@
 # Integración CFMOTO — Informe de pruebas
 
-**Fecha:** 2026-08-18
-**Resultado global:** ✅ **91 de 91 pruebas automatizadas en verde** (suite re-ejecutada dos veces para verificar idempotencia).
+**Fecha:** 2026-08-18 (actualizado 2026-08-19 con log de tráfico)
+**Resultado global:** ✅ **99 de 99 pruebas automatizadas en verde** (suite re-ejecutada dos veces para verificar idempotencia).
+
+## Log de tráfico (agregado 2026-08-19)
+
+Todo el tráfico de la integración queda auditado en archivos diarios dentro de `src/_recursos/cfmoto/`:
+
+- **`api-recibidos-AAAAMMDD.log`** — cada request que entra a la API: fecha/hora, IP, método, URL, body recibido, código HTTP devuelto, respuesta completa y duración en ms. Incluye errores (401/404/422/500 y fatales). La contraseña del login queda censurada (`"password":"***"`).
+- **`api-enviados-AAAAMMDD.log`** — cada webhook que nosotros disparamos: URL destino, JSON enviado, código HTTP de ellos, su respuesta textual y duración. Los fallos quedan con el error de conexión.
+
+Cuerpos truncados a 500 KB por entrada para que un GET masivo no infle el archivo. Suite G (8 pruebas) valida ambos logs.
 
 ## Entorno
 

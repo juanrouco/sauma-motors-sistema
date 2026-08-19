@@ -18,7 +18,11 @@ class Response
     public static function send($data, $code = 200)
     {
         http_response_code($code);
-        echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (class_exists('ApiLog', false)) {
+            ApiLog::Response($code, $json);
+        }
+        echo $json;
         exit;
     }
 

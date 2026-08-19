@@ -820,13 +820,17 @@ class CFMoto
 		}
 	}
 
-	/* POST JSON al CRM; si falla, encola el envio para reintento por cron */
+	/* POST JSON al CRM; si falla, encola el envio para reintento por cron.
+	   Todo el intercambio (que mandamos, a donde, que respondieron) queda
+	   registrado en _recursos/cfmoto/api-enviados-AAAAMMDD.log */
 	public static function Enviar($url, $data, $encolarSiFalla = true)
 	{
 		$json = json_encode($data, JSON_UNESCAPED_UNICODE);
 
 		$codigoHttp = 0;
 		$errorCurl = '';
+		$respuesta = '';
+		$inicio = microtime(true);
 
 		if (function_exists('curl_init'))
 		{
@@ -838,7 +842,9 @@ class CFMoto
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::TimeoutConexion);
 			curl_setopt($ch, CURLOPT_TIMEOUT, self::TimeoutTotal);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-			curl_exec($ch);
+			$respuesta = curl_exec($ch);
+			if ($respuesta === false)
+				$respuesta = '';
 			$codigoHttp = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			$errorCurl = curl_error($ch);
 			curl_close($ch);
@@ -855,10 +861,17 @@ class CFMoto
 			if ($respuesta !== false)
 				$codigoHttp = 200;
 			else
+			{
+				$respuesta = '';
 				$errorCurl = 'file_get_contents fallo';
+			}
 		}
 
 		$ok = ($codigoHttp >= 200 && $codigoHttp < 300);
+		$ms = round((microtime(true) - $inicio) * 1000);
+
+		/* log detallado del intercambio completo */
+		self::LogEnviado($url, $json, $codigoHttp, $respuesta, $errorCurl, $ms);
 
 		if ($ok)
 		{
@@ -872,6 +885,26 @@ class CFMoto
 		}
 
 		return $ok;
+	}
+
+	/* Registro completo de cada webhook saliente: URL, body enviado,
+	   codigo HTTP y respuesta textual del otro lado */
+	public static function LogEnviado($url, $jsonEnviado, $codigoHttp, $respuesta, $errorCurl, $ms)
+	{
+		$maxBody = 500000;
+		if (strlen($jsonEnviado) > $maxBody)
+			$jsonEnviado = substr($jsonEnviado, 0, $maxBody) . ' ...[TRUNCADO]';
+		if (strlen($respuesta) > $maxBody)
+			$respuesta = substr($respuesta, 0, $maxBody) . ' ...[TRUNCADO]';
+
+		$linea  = '==== ' . date('Y-m-d H:i:s') . ' ====' . "\n";
+		$linea .= '>> POST ' . $url . "\n";
+		$linea .= 'ENVIADO: ' . $jsonEnviado . "\n";
+		$linea .= '<< HTTP ' . (int)$codigoHttp . ' (' . $ms . ' ms)' . ($errorCurl ? ' ERROR: ' . $errorCurl : '') . "\n";
+		$linea .= 'RESPUESTA: ' . ($respuesta !== '' ? $respuesta : '(vacia)') . "\n\n";
+
+		$archivo = self::PathRecursos() . 'api-enviados-' . date('Ymd') . '.log';
+		@file_put_contents($archivo, $linea, FILE_APPEND | LOCK_EX);
 	}
 
 	/* ==================================================================== */

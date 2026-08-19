@@ -7,18 +7,23 @@ register_shutdown_function(function() {
     if ($error && in_array($error['type'], array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR))) {
         http_response_code(500);
         header('Content-Type: application/json; charset=utf-8');
-        echo json_encode(array(
+        $salida = json_encode(array(
             'ok'      => false,
             'mensaje' => 'Error fatal: ' . $error['message'],
             'archivo' => $error['file'],
             'linea'   => $error['line'],
         ));
+        if (class_exists('ApiLog', false)) {
+            ApiLog::Response(500, $salida);
+        }
+        echo $salida;
     }
 });
 
 if (!defined('undefined')) { define('undefined', null); }
 
 require_once __DIR__ . '/helpers/Response.php';
+require_once __DIR__ . '/helpers/apilog.php';
 
 Response::headers();
 
@@ -33,6 +38,13 @@ if (!empty($_SERVER['PATH_INFO'])) {
 }
 
 $metodo = $_SERVER['REQUEST_METHOD'];
+
+// ── Log de trafico: registra el request apenas llega ────────────────────────
+$rawBody = '';
+if ($metodo !== 'GET' && $metodo !== 'DELETE') {
+    $rawBody = file_get_contents('php://input');
+}
+ApiLog::Request($metodo, $_SERVER['REQUEST_URI'], $rawBody);
 
 // ── Registro de rutas ────────────────────────────────────────────────────────
 $routes = require __DIR__ . '/routes/routes.php';
@@ -62,8 +74,7 @@ require_once __DIR__ . '/controllers/' . strtolower($controllerClass) . '.php';
 // ── Preparacion de argumentos ────────────────────────────────────────────────
 $body = array();
 if ($metodo !== 'GET' && $metodo !== 'DELETE') {
-    $raw  = file_get_contents('php://input');
-    $body = json_decode($raw, true);
+    $body = json_decode($rawBody, true);
     if (json_last_error() !== JSON_ERROR_NONE) {
         Response::send(array('ok' => false, 'mensaje' => 'El body debe ser JSON valido.'), 400);
     }

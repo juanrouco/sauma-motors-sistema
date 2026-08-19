@@ -40,6 +40,8 @@ mysqli_query($db, "UPDATE tb_clientes SET Email='juan.perez@cfmototest.com' WHER
 @unlink('/var/www/html/_recursos/cfmoto/eventos-recibidos.log');
 foreach (glob('/var/www/html/_recursos/cfmoto/pendientes/*.json') as $f) @unlink($f);
 @unlink('/tmp/mock-recibido.log');
+@unlink('/var/www/html/_recursos/cfmoto/api-recibidos-' . date('Ymd') . '.log');
+@unlink('/var/www/html/_recursos/cfmoto/api-enviados-' . date('Ymd') . '.log');
 
 echo "=== SUITE A: Autenticacion ===\n";
 
@@ -282,6 +284,20 @@ check('F9 el log de la integracion registra actividad', strpos($logHoy, 'OK POST
 $oTU = new TallerUnidades();
 $p = CFMoto::PayloadMoto($oTU->GetById(800003));
 check('F10 moto sin VIN en payload: vin null', $p['vin'] === null);
+
+echo "=== SUITE G: log de trafico (recibidos y enviados) ===\n";
+
+$logRecibidos = @file_get_contents('/var/www/html/_recursos/cfmoto/api-recibidos-' . date('Ymd') . '.log');
+check('G1 log de recibidos: existe y registra los GET', strpos($logRecibidos, 'GET /api/sync/taller/turnos') !== false);
+check('G2 log de recibidos: registra el body de los POST', strpos($logRecibidos, 'LCEPCJL4XP1009999') !== false);
+check('G3 log de recibidos: registra la respuesta y el codigo', strpos($logRecibidos, '<< HTTP 200') !== false && strpos($logRecibidos, 'RESPONSE: {') !== false);
+check('G4 log de recibidos: registra tambien los errores (401/404/422)', strpos($logRecibidos, '<< HTTP 401') !== false && strpos($logRecibidos, '<< HTTP 404') !== false);
+check('G5 log de recibidos: password del login censurada', strpos($logRecibidos, '"password":"***"') !== false && strpos($logRecibidos, 'apitest123') === false);
+
+$logEnviados = @file_get_contents('/var/www/html/_recursos/cfmoto/api-enviados-' . date('Ymd') . '.log');
+check('G6 log de enviados: registra URL destino y body enviado', strpos($logEnviados, '>> POST http://127.0.0.1:9999/webhook/taller') !== false && strpos($logEnviados, 'ENVIADO: {"prueba":"mock"') !== false);
+check('G7 log de enviados: registra la respuesta del otro lado', strpos($logEnviados, 'RESPUESTA: {"ok":true}') !== false);
+check('G8 log de enviados: los fallos quedan con el error', strpos($logEnviados, '<< HTTP 0') !== false && strpos($logEnviados, 'ERROR:') !== false);
 
 echo "\n=== RESULTADO ===\n";
 foreach ($resultados as $r) echo $r . "\n";
