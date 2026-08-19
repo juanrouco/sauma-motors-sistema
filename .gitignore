@@ -20,3 +20,9 @@ PEAR/cache/*
 .tmp.drivedownload/*
 _recursos/archivos/*.xlsx
 .tmp.driveupload/*
+
+# Dumps de base (datos reales, nunca al repo)
+src/sql/init/*.sql
+
+# Logs y cola de reintentos de la integracion CFMOTO (runtime)
+src/_recursos/cfmoto/

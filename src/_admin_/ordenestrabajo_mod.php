@@ -122,6 +122,12 @@ if ($Submit)
 			
 		$oClientes->Update($oCliente);
 
+		/* notifica al CRM CFMOTO el cambio de estado / datos de la orden */
+		CFMoto::NotificarOrdenTrabajo(
+			$oOrdenTrabajo->IdOrdenTrabajo,
+			($IdEstadoOrden == EstadoOrden::Finalizado) ? 'taller.estado_actualizado' : 'taller.orden_actualizada'
+		);
+
 		header("Location: ordenestrabajo.php" . $strParams);
 		exit();
 	}

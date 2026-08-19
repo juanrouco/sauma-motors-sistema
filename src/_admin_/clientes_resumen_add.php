@@ -2,7 +2,7 @@
 
 require_once('../inc_library.php'); 
 
-/* sección exclusiva para clientes autentificados */
+/* secciï¿½n exclusiva para clientes autentificados */
 Session::ForceLogin();
 
 /* verificamos si posee permisos */
@@ -214,6 +214,10 @@ if ($Submit)
 		/* crea el usuario */
 		$oCliente = $oClientes->Create($oCliente);
 		$oClientes->ActualizarPercepciones($oCliente);
+
+		/* notifica al CRM CFMOTO el alta del cliente */
+		if ($oCliente && $oCliente->IdCliente)
+			CFMoto::NotificarCliente($oCliente->IdCliente, 'contacto.creado');
 
 		if (!$popup)
 		{

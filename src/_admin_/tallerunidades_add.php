@@ -3,7 +3,7 @@
 require_once('../inc_library.php'); 
 require_once('../library/suggest/include.php'); 
 
-/* sección exclusiva para usuarios autentificados */
+/* secciï¿½n exclusiva para usuarios autentificados */
 Session::ForceLogin();
 
 /* verificamos si posee permisos */
@@ -51,7 +51,8 @@ if ($Submit)
 		$err |= 16;
 	if ($IdCliente == '' || $IdCliente == '0')
 		$err |= 32;
-	/*if ($NumeroVin == '' || strlen($NumeroVin) != 17)
+	/* el VIN es obligatorio: es la llave maestra de la integracion con el CRM CFMOTO */
+	if ($NumeroVin == '' || strlen(trim($PrefijoVin . $NumeroVin)) != 17)
 		$err |= 128;
 	/*if ($NumeroMotor == '')
 		$err |= 256;*/

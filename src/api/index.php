@@ -44,6 +44,12 @@ if (!isset($routes[$metodo]) || !isset($routes[$metodo][$ruta])) {
         'endpoints_disponibles' => array(
             'POST /api/login',
             'GET  /api/verificar',
+            'GET  /api/sync/clientes?orden_id=X',
+            'POST /api/sync/clientes',
+            'GET  /api/sync/taller/turnos[?id=X]',
+            'POST /api/sync/taller/turnos',
+            'POST /api/webhook/contactos',
+            'POST /api/webhook/taller',
         ),
     ), 404);
 }

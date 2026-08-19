@@ -2,7 +2,7 @@
 
 require_once('../inc_library.php'); 
 
-/* sección exclusiva para usuarios autentificados */
+/* secciï¿½n exclusiva para usuarios autentificados */
 Session::ForceLogin();
 
 /* verificamos si posee permisos */
@@ -37,6 +37,9 @@ if ($Submit)
 	
 	$oOrdenTrabajo->IdEstadoOrden	= EstadoOrden::Finalizado;
 	$oOrdenesTrabajo->Update($oOrdenTrabajo);
+
+	/* notifica al CRM CFMOTO la finalizacion de la orden */
+	CFMoto::NotificarOrdenTrabajo($oOrdenTrabajo->IdOrdenTrabajo, 'taller.estado_actualizado');
 
 	header("Location: ordenestrabajo_taller.php" . $strParams);
 	exit;

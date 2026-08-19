@@ -297,6 +297,28 @@ class OrdenesTrabajo extends DBAccess implements IFilterable
 		return $oOrdenTrabajo;		
 	}
 
+	/* Ultima OT de una unidad sin filtrar por estado (GetLastByIdTallerUnidad
+	   solo considera las Aceptadas). Usada por la integracion CFMOTO. */
+	public function GetUltimaByIdTallerUnidad($IdTallerUnidad)
+	{
+		$sql = "SELECT *";
+		$sql.= " FROM TB_OrdenesTrabajo";
+		$sql.= " WHERE IdTallerUnidad = " . DB::Number($IdTallerUnidad);
+		$sql.= " ORDER BY IdOrdenTrabajo DESC";
+		$sql.= " LIMIT 1";
+
+		if (!($oRes = $this->GetQuery($sql)))
+			return false;
+
+		if (!($oRow = $oRes->GetRow()))
+			return false;
+
+		$oOrdenTrabajo = new OrdenTrabajo();
+		$oOrdenTrabajo->ParseFromArray($oRow);
+
+		return $oOrdenTrabajo;
+	}
+
 	public function GetCountRows(array $filter = NULL)
 	{
 		$sql = "SELECT ot.*";

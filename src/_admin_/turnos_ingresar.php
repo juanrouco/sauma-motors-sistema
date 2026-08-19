@@ -2,7 +2,7 @@
 
 require_once('../inc_library.php'); 
 
-/* sección exclusiva para usuarios autentificados */
+/* secciï¿½n exclusiva para usuarios autentificados */
 Session::ForceLogin();
 
 /* obtiene datos enviados */
@@ -29,10 +29,16 @@ if (!$oTurno = $oTurnos->GetById($IdTurno))
 
 if ($Submit)
 {
-	/* validaciones... 
+	/* validaciones...
 	if (trim($Comentarios) == '')
-		$err += 1;	
+		$err += 1;
 */
+	/* el VIN de la unidad es obligatorio para abrir una orden (llave maestra del CRM CFMOTO) */
+	$oTallerUnidades = new TallerUnidades();
+	$oTallerUnidadTurno = $oTallerUnidades->GetById($oTurno->IdTallerUnidad);
+	if (!$oTallerUnidadTurno || trim($oTallerUnidadTurno->PrefijoVin . $oTallerUnidadTurno->NumeroVin) == '')
+		$err |= 2;
+
 	/* si no hay errores... */
 	if ($err == 0)
 	{		
@@ -54,7 +60,11 @@ if ($Submit)
 			}
 			
 			$oTurnos->Update($oTurno);
-			
+
+			/* notifica al CRM CFMOTO la creacion de la orden */
+			if ($oOrdenTrabajo && $oOrdenTrabajo->IdOrdenTrabajo)
+				CFMoto::NotificarOrdenTrabajo($oOrdenTrabajo->IdOrdenTrabajo, 'taller.orden_creada');
+
 			header("Location: ordenestrabajo_imagenes.php" . $strParams . '&IdTurno=' . $oOrdenTrabajo->IdTurno);
 			exit();
 		
@@ -110,6 +120,12 @@ if ($Submit)
                                 	<tr>
 										<td>&nbsp;</td>
 										<td align="left"><li style="color:#FF0000;">Ingrese el comentario</li></td>
+                                    </tr>
+								<?php } ?>
+								<?php if ($err & 2) { ?>
+                                	<tr>
+										<td>&nbsp;</td>
+										<td align="left"><li style="color:#FF0000;">La unidad no tiene N&deg; de chasis (VIN) cargado. Carguelo en Taller - Unidades antes de ingresarla.</li></td>
                                     </tr>
 								<?php } ?>
 															

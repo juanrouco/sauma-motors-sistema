@@ -2,7 +2,7 @@
 
 require_once('../inc_library.php'); 
 
-/* sección exclusiva para usuarios autentificados */
+/* secciï¿½n exclusiva para usuarios autentificados */
 Session::ForceLogin();
 
 /* obtiene datos enviados */
@@ -33,7 +33,10 @@ if ($oOrdenTrabajo->GetListoFinalizar() && $oOrdenTrabajo->GetTareaNegativa())
 	$oOrdenTrabajo->IdEstadoOrden = EstadoOrden::Finalizado;
 	$oOrdenTrabajo->FechaFin = date('d-m-Y H:i:s');
 	$oOrdenesTrabajo->Update($oOrdenTrabajo);
-				
+
+	/* notifica al CRM CFMOTO la finalizacion de la orden */
+	CFMoto::NotificarOrdenTrabajo($oOrdenTrabajo->IdOrdenTrabajo, 'taller.estado_actualizado');
+
 	header("Location: ordenestrabajo_detail.php" . $strParams . '&IdOrdenTrabajo=' . $oOrdenTrabajo->IdOrdenTrabajo);
 }
 else

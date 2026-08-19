@@ -61,6 +61,9 @@ if ($Submit)
 		$err |= 2;
 	if ($Fecha == '')
 		$err |= 4;
+	/* el VIN es obligatorio para abrir una orden (llave maestra del CRM CFMOTO) */
+	if (trim($NumeroVin) == '')
+		$err |= 8;
 		
 	/* si no hay errores... */
 	if ($err == 0)
@@ -100,7 +103,10 @@ if ($Submit)
 			$oCliente->DocumentoNumero = $DocumentoNumero;
 			
 			$oClientes->Update($oCliente);
-			
+
+			/* notifica al CRM CFMOTO la creacion de la orden */
+			CFMoto::NotificarOrdenTrabajo($oOrdenTrabajo->IdOrdenTrabajo, 'taller.orden_creada');
+
 			header("Location: ordenestrabajotareas.php" . $strParams . '&IdOrdenTrabajo=' . $oOrdenTrabajo->IdOrdenTrabajo);
 			exit();
 		}
@@ -324,6 +330,7 @@ $j(document).ready(function() {
 																						</td>
 																						<td valign="top">
 																							<input type="text" name="NumeroVin" id="NumeroVin" class="camporFormularioSimple" onkeyup="javascript: StrToUpper(this.id);" value="<?= $lblTallerUnidad ?>" autocomplete="off" style="width: 225px" />
+																							<?php if ($err & 8) { ?><li style="color:#FF0000;">Debe ingresar el N&deg; de chasis (VIN)</li><?php } ?>
 																						</td>
 																					</tr>
 																					<tr>

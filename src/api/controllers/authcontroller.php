@@ -13,8 +13,14 @@ class AuthController
         return Response::forGiven(200, true, 'API SAUMA funcionando correctamente.', array(
             'version'   => '1.0',
             'endpoints' => array(
-                'POST /api/login'     => 'Autenticar y obtener token JWT',
-                'GET  /api/verificar' => 'Verificar validez del token',
+                'POST /api/login'              => 'Autenticar y obtener token JWT',
+                'GET  /api/verificar'          => 'Verificar validez del token',
+                'GET  /api/sync/clientes'      => 'Cliente por orden de trabajo (?orden_id=X) o por id (?id=X), formato CFMOTO',
+                'POST /api/sync/clientes'      => 'Alta/actualizacion de clientes y sus motos (formato CFMOTO)',
+                'GET  /api/sync/taller/turnos' => 'Orden puntual (?id=X) o todas las finalizadas, formato CFMOTO',
+                'POST /api/sync/taller/turnos' => 'Alta/actualizacion de ordenes de trabajo (VIN obligatorio)',
+                'POST /api/webhook/contactos'  => 'Webhook entrante de contactos del CRM CFMOTO',
+                'POST /api/webhook/taller'     => 'Webhook entrante de taller del CRM CFMOTO',
             ),
         ));
     }

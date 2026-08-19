@@ -3,7 +3,7 @@
 require_once('../inc_library.php'); 
 require_once('../library/suggest/include.php'); 
 
-/* sección exclusiva para clientes autentificados */
+/* secciï¿½n exclusiva para clientes autentificados */
 Session::ForceLogin();
 
 /* verificamos si posee permisos 
@@ -223,7 +223,11 @@ if ($Submit)
 		/* modifica el usuario */
 		$oCliente = $oClientes->Update($oCliente);
 		$oClientes->ActualizarPercepciones($oCliente);
-		
+
+		/* notifica al CRM CFMOTO la actualizacion del cliente */
+		if ($oCliente && $oCliente->IdCliente)
+			CFMoto::NotificarCliente($oCliente->IdCliente, 'contacto.actualizado');
+
 		header("Location: clientes.php" . $strParams);
 		exit();
 	}

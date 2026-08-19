@@ -44,11 +44,38 @@ class ClienteContactos extends DBAccess implements IFilterable
 	}
 	
 
+	/* Metodo faltante: Cliente::GetAllContactos() lo invoca pero no existia */
+	public function GetAllByCliente(Cliente $oCliente)
+	{
+		$sql = "SELECT *";
+		$sql.= " FROM TB_ClienteContactos";
+		$sql.= " WHERE IdCliente = " . DB::Number($oCliente->IdCliente);
+		$sql.= " ORDER BY Nombre";
+
+		if (!($oRes = $this->GetQuery($sql)))
+			return false;
+
+		$arr = array();
+
+		while ($oRow = $oRes->GetRow())
+		{
+			$oClienteContacto = new ClienteContacto();
+			$oClienteContacto->ParseFromArray($oRow);
+
+			array_push($arr, $oClienteContacto);
+
+			$oRes->MoveNext();
+		}
+
+		return $arr;
+	}
+
+
 	public function GetById($IdContacto)
 	{
 		$sql = "SELECT *";
 		$sql.= " FROM TB_ClienteContactos";
-		$sql.= " WHERE IdContacto = " . DB::Number($IdContacto);	
+		$sql.= " WHERE IdContacto = " . DB::Number($IdContacto);
 			
 		if (!($oRes = $this->GetQuery($sql)))
 			return false;
