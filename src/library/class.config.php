@@ -17,11 +17,11 @@ class Config
 	/* Nombre de la empresa */
 	const NombreEmpresa = 'Sistema Consecionaria';									
 	/* Url sin ningun subdirectorio del sitio */
-	const UrlSitio = 'http://192.168.1.100';			
+	const UrlSitio = 'http://sauma.mine.nu';
 	/* Url con el directorio del sitio en ingles */
-	const UrlSitioEnglish = 'http://192.168.1.100/_admin_/';	
+	const UrlSitioEnglish = 'http://sauma.mine.nu/_admin_/';
 	/* Url con el directorio del sitio en espa�ol */
-	const UrlSitioEspanol = 'http://192.168.1.100/_admin_/';	
+	const UrlSitioEspanol = 'http://sauma.mine.nu/_admin_/';
 	/* Directorio de la imagen que ir� por default cuando no haya una imagen cargada */	
 	const ImagenDefault	= 'images/no_foto.jpg';								
 	/* Correo electronico del administrador */
