@@ -18,14 +18,23 @@ if ($Submit)
 	if ((trim($User) != "") && (trim($Pass) != ""))
 	{
 		$retValue = Session::Login($User, $Pass);
-		
+
 		if ($retValue === Session::LoginError)
 		{
 			Session::ForceLogin($User, 'index.php', $retValue);
 			exit();
 		}
 		else
-		{	
+		{
+			/* los usuarios de perfil API son solo para integraciones:
+			   no pueden iniciar sesion en el panel */
+			if ($retValue && $retValue->IdPerfil == Perfil::Api)
+			{
+				Session::Logout();
+				Session::ForceLogin($User, 'index.php', Session::LoginError);
+				exit();
+			}
+
 			header("Location: home.php");
 		}
 	}

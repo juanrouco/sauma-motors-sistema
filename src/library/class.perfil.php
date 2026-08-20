@@ -10,6 +10,9 @@ class Perfil
 	const Administrador = 1;
 	const Vendedor 		= 2;
 	const Tesorero 		= 19;
+	/* perfil para credenciales de integraciones externas (CRM CFMOTO, etc):
+	   pueden usar la API pero no pueden entrar al panel de administracion */
+	const Api 			= 90;
 		
 
 	public function __construct()
