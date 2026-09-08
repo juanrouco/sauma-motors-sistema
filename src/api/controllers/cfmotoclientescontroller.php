@@ -133,12 +133,13 @@ class CfmotoClientesController
 		$creados = 0;
 		$actualizados = 0;
 		$errores = array();
+		$asignaciones = array();
 
 		foreach ($body['clientes'] as $cliente)
 		{
 			try
 			{
-				$resultado = $this->procesarCliente($cliente, $errores);
+				$resultado = $this->procesarCliente($cliente, $errores, $asignaciones);
 				if ($resultado === 'creado')
 					$creados++;
 				elseif ($resultado === 'actualizado')
@@ -160,6 +161,9 @@ class CfmotoClientesController
 			'creados'      => $creados,
 			'actualizados' => $actualizados,
 			'errores'      => $errores,
+			/* ids asignados por nosotros a clientes y motos creados, para
+			   que el CRM re-mapee sus id_externo (pedido CFMOTO 2026-09-07) */
+			'asignaciones' => $asignaciones,
 			'procesado_en' => CFMoto::AhoraIso(),
 		));
 	}
@@ -168,7 +172,7 @@ class CfmotoClientesController
 	 * Crea o actualiza un cliente a partir del payload del CRM.
 	 * Devuelve 'creado', 'actualizado' o false (fue a $errores).
 	 */
-	private function procesarCliente($cliente, &$errores)
+	private function procesarCliente($cliente, &$errores, &$asignaciones)
 	{
 		$oClientes = new Clientes();
 
@@ -346,6 +350,12 @@ class CfmotoClientesController
 				return false;
 			}
 			CFMoto::Log('API: cliente creado #' . $oCliente->IdCliente . ' (' . (isset($cliente['id_externo']) ? $cliente['id_externo'] : 's/id') . ')');
+
+			/* devolvemos el codigo CLI asignado para que el CRM lo guarde */
+			$asignaciones[] = array(
+				'id_externo'  => isset($cliente['id_externo']) ? $cliente['id_externo'] : null,
+				'id_asignado' => CFMoto::IdExternoCliente($oCliente->IdCliente),
+			);
 		}
 		elseif ($cambios)
 		{
@@ -365,7 +375,7 @@ class CfmotoClientesController
 		if (isset($cliente['motos']) && is_array($cliente['motos']))
 		{
 			foreach ($cliente['motos'] as $moto)
-				$this->procesarMoto($moto, $oCliente->IdCliente, $errores);
+				$this->procesarMoto($moto, $oCliente->IdCliente, $errores, $asignaciones);
 		}
 
 		return $esNuevo ? 'creado' : 'actualizado';
@@ -375,7 +385,7 @@ class CfmotoClientesController
 	 * Crea o actualiza una taller unidad a partir de una moto del payload.
 	 * El VIN es obligatorio: es la llave maestra de matching.
 	 */
-	private function procesarMoto($moto, $IdCliente, &$errores)
+	private function procesarMoto($moto, $IdCliente, &$errores, &$asignaciones)
 	{
 		$idExterno = isset($moto['id_externo']) ? $moto['id_externo'] : null;
 
@@ -459,7 +469,13 @@ class CfmotoClientesController
 		{
 			$oTallerUnidad = $oTallerUnidades->Create($oTallerUnidad);
 			if ($oTallerUnidad)
+			{
 				CFMoto::Log('API: taller unidad creada #' . $oTallerUnidad->IdTallerUnidad . ' VIN ' . $vin);
+				$asignaciones[] = array(
+					'id_externo'  => $idExterno,
+					'id_asignado' => CFMoto::IdExternoMoto($oTallerUnidad->IdTallerUnidad),
+				);
+			}
 		}
 		else
 		{

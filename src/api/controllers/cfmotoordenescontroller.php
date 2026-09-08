@@ -56,8 +56,32 @@ class CfmotoOrdenesController
 		}
 		else
 		{
-			/* sin filtro: todas las finalizadas */
-			$arrOrdenes = $oOrdenesTrabajo->GetAll(array('IdEstadoOrden' => EstadoOrden::Finalizado));
+			/* listado de finalizadas, con filtros por fecha y paginacion
+			   opcionales (pedido CFMOTO 2026-09-07):
+			     ?fecha_desde=AAAA-MM-DD  ?fecha_hasta=AAAA-MM-DD (fecha de la orden)
+			     ?pagina=N  ?por_pagina=M (max 200; por defecto 100 al paginar) */
+			$filter = array('IdEstadoOrden' => EstadoOrden::Finalizado);
+			if (!empty($query['fecha_desde']))
+				$filter['FechaDesde'] = trim($query['fecha_desde']);
+			if (!empty($query['fecha_hasta']))
+				$filter['FechaHasta'] = trim($query['fecha_hasta']);
+
+			$pagina    = isset($query['pagina'])     ? (int)$query['pagina']     : 0;
+			$porPagina = isset($query['por_pagina']) ? (int)$query['por_pagina'] : 0;
+
+			$oPage = null;
+			if ($pagina > 0 || $porPagina > 0)
+			{
+				if ($pagina <= 0)
+					$pagina = 1;
+				if ($porPagina <= 0)
+					$porPagina = 100;
+				if ($porPagina > 200)
+					$porPagina = 200;
+				$oPage = new Page($pagina, $porPagina);
+			}
+
+			$arrOrdenes = $oOrdenesTrabajo->GetAll($filter, $oPage);
 			if ($arrOrdenes === false)
 				return Response::forGiven(500, false, 'Error al obtener las ordenes de trabajo.');
 
@@ -69,11 +93,25 @@ class CfmotoOrdenesController
 			}
 		}
 
-		return array(200, array(
+		$respuesta = array(
 			'origen_sistema' => CFMoto::OrigenSistema,
 			'generado_en'    => CFMoto::AhoraIso(),
 			'turnos'         => $turnos,
-		));
+		);
+
+		/* al paginar informamos tambien el total, para que el CRM sepa
+		   cuantas paginas le quedan */
+		if (isset($oPage) && $oPage)
+		{
+			$total = $oOrdenesTrabajo->GetCountRows($filter);
+			$respuesta['paginacion'] = array(
+				'pagina'     => $pagina,
+				'por_pagina' => $porPagina,
+				'total'      => ($total !== false) ? (int)$total : null,
+			);
+		}
+
+		return array(200, $respuesta);
 	}
 
 	/**

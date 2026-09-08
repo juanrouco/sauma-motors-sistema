@@ -38,8 +38,12 @@ require_once('class.ordentrabajoimagenes.php');
 class CFMoto
 {
 	const OrigenSistema			= 'DMS_CONCESIONARIA';
-	const UrlWebhookContactos	= 'https://backend-production-3df97.up.railway.app/webhook/contactos';
-	const UrlWebhookTaller		= 'https://backend-production-3df97.up.railway.app/webhook/taller';
+	/* URLs confirmadas por CFMOTO (doc del 2026-09-07) */
+	const UrlWebhookContactos	= 'https://backend-production-3df97.up.railway.app/api/webhooks/sauma/contactos';
+	const UrlWebhookTaller		= 'https://backend-production-3df97.up.railway.app/api/webhooks/sauma/taller';
+	/* clave que nos identifica ante el CRM: viaja por query string y por
+	   header x-sauma-secret; sin ella responden 401 */
+	const WebhookSecret			= 'sXjHMoWnyJB644mLVLOHsNnZt86H_6vkynL1QT_MwSs';
 
 	/* Garantia: solo tenemos fecha de inicio; el fin se calcula con el plazo estandar */
 	const GarantiaMeses			= 24;
@@ -827,6 +831,16 @@ class CFMoto
 	{
 		$json = json_encode($data, JSON_UNESCAPED_UNICODE);
 
+		/* autenticacion ante el CRM: secret por query string (si no viene ya
+		   en la URL, p.ej. en reintentos encolados) y siempre por header */
+		$headers = array('Content-Type: application/json');
+		if (self::WebhookSecret != '')
+		{
+			if (strpos($url, 'secret=') === false)
+				$url .= ((strpos($url, '?') === false) ? '?' : '&') . 'secret=' . self::WebhookSecret;
+			$headers[] = 'x-sauma-secret: ' . self::WebhookSecret;
+		}
+
 		$codigoHttp = 0;
 		$errorCurl = '';
 		$respuesta = '';
@@ -837,7 +851,7 @@ class CFMoto
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::TimeoutConexion);
 			curl_setopt($ch, CURLOPT_TIMEOUT, self::TimeoutTotal);
@@ -853,7 +867,7 @@ class CFMoto
 		{
 			$contexto = stream_context_create(array('http' => array(
 				'method'  => 'POST',
-				'header'  => 'Content-Type: application/json',
+				'header'  => implode("\r\n", $headers),
 				'content' => $json,
 				'timeout' => self::TimeoutTotal,
 			)));

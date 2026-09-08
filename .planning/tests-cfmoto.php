@@ -165,6 +165,15 @@ $nuevoCliente = array(
 
 list($c, $j) = http('POST', "$BASE/sync/clientes", array('origen_sistema' => 'CFMOTO_WEB', 'clientes' => array($nuevoCliente)), $TOKEN);
 check('D1 alta cliente nuevo: creados=1 sin errores', $c == 200 && $j['creados'] == 1 && count($j['errores']) == 0, json_encode($j));
+$asigCli = false; $asigMoto = false;
+if (isset($j['asignaciones'])) {
+	foreach ($j['asignaciones'] as $a) {
+		if ($a['id_externo'] == 'CRM-NUEVO-001' && strpos($a['id_asignado'], 'CLI-') === 0) $asigCli = true;
+		if ($a['id_externo'] == 'CRM-MOTO-001' && strpos($a['id_asignado'], 'UNI-') === 0) $asigMoto = true;
+	}
+}
+check('D1b asignaciones: devuelve el CLI asignado al cliente nuevo', $asigCli, json_encode(isset($j['asignaciones']) ? $j['asignaciones'] : null));
+check('D1c asignaciones: devuelve el UNI asignado a la moto nueva', $asigMoto);
 $idNuevo = q("SELECT IdCliente FROM tb_clientes WHERE DocumentoNumero='99887766'");
 check('D2 cliente existe en la base', $idNuevo > 0, "id=$idNuevo");
 check('D3 nombre guardado en latin1 con acentos y enie', q("SELECT RazonSocial FROM tb_clientes WHERE IdCliente=$idNuevo") == utf8_decode('Ángel Rodríguez Peña'));
@@ -298,6 +307,26 @@ $logEnviados = @file_get_contents('/var/www/html/_recursos/cfmoto/api-enviados-'
 check('G6 log de enviados: registra URL destino y body enviado', strpos($logEnviados, '>> POST http://127.0.0.1:9999/webhook/taller') !== false && strpos($logEnviados, 'ENVIADO: {"prueba":"mock"') !== false);
 check('G7 log de enviados: registra la respuesta del otro lado', strpos($logEnviados, 'RESPUESTA: {"ok":true}') !== false);
 check('G8 log de enviados: los fallos quedan con el error', strpos($logEnviados, '<< HTTP 0') !== false && strpos($logEnviados, 'ERROR:') !== false);
+
+echo "=== SUITE H: filtros, paginacion y secret (pedidos CFMOTO 07-09) ===\n";
+
+/* al llegar aca las finalizadas son: 700001 (2026-08-10), 700002 (2026-08-15), 700004 (2026-07-01) */
+list($c, $j) = http('GET', "$BASE/sync/taller/turnos?fecha_desde=2026-08-05&fecha_hasta=2026-08-11", null, $TOKEN);
+$ids = array(); if (isset($j['turnos'])) foreach ($j['turnos'] as $tt) $ids[] = $tt['id_externo'];
+check('H1 filtro por fecha: solo la orden del rango', $c == 200 && count($ids) == 1 && $ids[0] == 'OT-700001', implode(',', $ids));
+
+list($c, $j) = http('GET', "$BASE/sync/taller/turnos?pagina=1&por_pagina=1", null, $TOKEN);
+$idPagina1 = isset($j['turnos'][0]['id_externo']) ? $j['turnos'][0]['id_externo'] : '';
+check('H2 paginacion: devuelve 1 turno por pagina', $c == 200 && count($j['turnos']) == 1);
+check('H3 paginacion: informa pagina, por_pagina y total', isset($j['paginacion']) && $j['paginacion']['pagina'] == 1 && $j['paginacion']['por_pagina'] == 1 && $j['paginacion']['total'] >= 3, json_encode(isset($j['paginacion']) ? $j['paginacion'] : null));
+
+list($c, $j) = http('GET', "$BASE/sync/taller/turnos?pagina=2&por_pagina=1", null, $TOKEN);
+$idPagina2 = isset($j['turnos'][0]['id_externo']) ? $j['turnos'][0]['id_externo'] : '';
+check('H4 paginacion: la pagina 2 trae una orden distinta', count($j['turnos']) == 1 && $idPagina2 != '' && $idPagina2 != $idPagina1, "p1=$idPagina1 p2=$idPagina2");
+
+check('H5 secret: la URL saliente lleva ?secret=', strpos(@file_get_contents('/var/www/html/_recursos/cfmoto/api-enviados-' . date('Ymd') . '.log'), 'secret=sXjHMoWny') !== false);
+$mockLog = @file_get_contents('/tmp/mock-recibido.log');
+check('H6 secret: el receptor recibe el header x-sauma-secret', strpos($mockLog, 'hdr:sXjHMoWny') !== false, substr($mockLog, 0, 120));
 
 echo "\n=== RESULTADO ===\n";
 foreach ($resultados as $r) echo $r . "\n";
