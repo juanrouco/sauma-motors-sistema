@@ -2,7 +2,7 @@
 
 require_once('../inc_library.php'); 
 
-/* sección exclusiva para usuarios autentificados */
+/* secciï¿½n exclusiva para usuarios autentificados */
 Session::ForceLogin();
 
 /* verificamos si posee permisos */
@@ -391,6 +391,7 @@ function HideFilter()
                 <table width="100%" align="center" cellpadding="0" cellspacing="0" class="bordeGris">
                     <tr class="bordeGrisFondo">
                         <td height="25" class="bordeGrisTitulo"><div id="margen" align="center"><strong>Nro. Interno</strong></div></td>
+                        <td height="25" class="bordeGrisTitulo"><div id="margen" align="center"><strong>Carpeta Origen</strong></div></td>
                         <td height="25" class="bordeGrisTitulo"><div id="margen"><strong>Marca</strong></div></td>
                         <td height="25" class="bordeGrisTitulo"><div id="margen"><strong>Modelo</strong></div></td>
                         <td height="25" class="bordeGrisTitulo"><div id="margen"><strong>Dominio</strong></div></td>
@@ -416,15 +417,14 @@ function HideFilter()
 						$oUbicacion = $oUbicaciones->GetById($oUsado->IdUbicacion);
 						$oEstado = $oEstadosUnidad->GetById($oUsado->IdEstado);
 						$oRecepcionUsado = $oRecepcionesUsados->GetByIdUsado($oUsado->IdUsado);
+						/* carpeta de origen: la minuta (o minuta de usados) que tomo
+						   este usado; vacia para las cargas sin operacion de origen */
 						$CarpetaOrigen = '';
 						$oMinuta = $oMinutas->GetByIdUsado($oUsado->IdUsado);
 						if ($oMinuta)
 							$CarpetaOrigen = $oMinuta->IdMinuta;
-						else
-						{
-							$oMinutaUsado = $oMinutasUsados->GetByIdUsadoTomado($oUsado->IdUsado);
+						elseif ($oMinutaUsado = $oMinutasUsados->GetByIdUsadoTomado($oUsado->IdUsado))
 							$CarpetaOrigen = 'U-' . $oMinutaUsado->IdUsado;
-						}
 						
 						$arrUsadosArreglos = $oUsadosArreglos->GetAllByUsado($oUsado);
 
@@ -439,6 +439,7 @@ function HideFilter()
           
                     <tr onMouseOver="bgColor='<?= $oUsado->Pisado ? '#ADECDF': ($oUsado->IdEstado == EstadoUnidad::Reservado ? '#F4DA80' : '#f3f3f3') ?>'" onMouseOut="bgColor='<?= $oUsado->Pisado ? '#ADECDF':($oUsado->IdEstado == EstadoUnidad::Reservado ? '#F4DA80' : '') ?>'" bgColor='<?= $oUsado->Pisado ? '#ADECDF':($oUsado->IdEstado == EstadoUnidad::Reservado ? '#F4DA80' : '') ?>'>
                         <td width="100" height="25"><div id="margen" align="center">U-<?=$oUsado->IdUsado?></div></td>
+                        <td width="100" height="25"><div id="margen" align="center"><?=$CarpetaOrigen?></div></td>
                         <td width="163" height="25"><div id="margen"><?=$oMarca->Nombre?></div></td>
                         <td width="157" height="25"><div id="margen"><?=$oUsado->Modelo?></div></td>
                         <td width="157" height="25"><div id="margen"><?=$oUsado->Dominio?></div></td>
@@ -490,7 +491,7 @@ if (Session::CheckPerm(PERM_UNID_DELETE)) { ?> - <a href="usados_del.php<?=$strP
 						</td>
 					</tr>
                     <tr>
-                        <td colspan="12">
+                        <td colspan="17">
                             <div align="center">
                                 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
                                     <tr>
