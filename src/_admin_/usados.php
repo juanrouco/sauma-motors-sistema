@@ -420,10 +420,10 @@ function HideFilter()
 						/* carpeta de origen: la minuta (o minuta de usados) que tomo
 						   este usado; vacia para las cargas sin operacion de origen */
 						$CarpetaOrigen = '';
-						$oMinuta = $oMinutas->GetByIdUsado($oUsado->IdUsado);
+						$oMinuta = $oMinutas->GetById($oUsado->IdMinuta);
 						if ($oMinuta)
 							$CarpetaOrigen = $oMinuta->IdMinuta;
-						elseif ($oMinutaUsado = $oMinutasUsados->GetByIdUsadoTomado($oUsado->IdUsado))
+						elseif ($oMinutaUsado = $oMinutasUsados->GetById($oUsado->IdMinutaUsado))
 							$CarpetaOrigen = 'U-' . $oMinutaUsado->IdUsado;
 						
 						$arrUsadosArreglos = $oUsadosArreglos->GetAllByUsado($oUsado);
