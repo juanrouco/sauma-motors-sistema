@@ -44,7 +44,7 @@ class Usuarios extends DBAccess implements IFilterable
 	{
 		$sql = "SELECT *";
 		$sql.= " FROM TB_Usuarios";
-		$sql.= " WHERE Email NOT LIKE '%XXX%'";
+		$sql.= " WHERE Deleted = 0 AND Email NOT LIKE '%XXX%'";
 		$sql.= ($filter) ? $this->ParseFilter($filter) : "";
 		$sql.= " ORDER BY Apellido, Nombre";
 		$sql.= ($oPage) ? Pageable::ParsePage($oPage) : "";
@@ -99,7 +99,7 @@ class Usuarios extends DBAccess implements IFilterable
 	{
 		$sql = "SELECT *";
 		$sql.= " FROM TB_Usuarios";
-		$sql.= " WHERE IdPerfil = " . DB::Number(Perfil::Vendedor);
+		$sql.= " WHERE Deleted = 0 AND IdPerfil = " . DB::Number(Perfil::Vendedor);
 		$sql.= ($filter) ? $this->ParseFilter($filter) : "";
 		$sql.= " ORDER BY Apellido, Nombre";
 		$sql.= ($oPage) ? Pageable::ParsePage($oPage) : "";
@@ -127,7 +127,7 @@ class Usuarios extends DBAccess implements IFilterable
 	{
 		$sql = "SELECT *";
 		$sql.= " FROM TB_Usuarios";
-		$sql.= " WHERE IdSector = " . DB::Number($oSector->IdSector);
+		$sql.= " WHERE Deleted = 0 AND IdSector = " . DB::Number($oSector->IdSector);
 						
 		if (!($oRes = $this->GetQuery($sql)))
 			return false;
@@ -152,7 +152,7 @@ class Usuarios extends DBAccess implements IFilterable
 	{
 		$sql = "SELECT *";
 		$sql.= " FROM TB_Perfil";
-		$sql.= " WHERE IdPerfil = " . DB::Number($oPerfil->IdPerfil);
+		$sql.= " WHERE Deleted = 0 AND IdPerfil = " . DB::Number($oPerfil->IdPerfil);
 						
 		if (!($oRes = $this->GetQuery($sql)))
 			return false;
@@ -196,7 +196,7 @@ class Usuarios extends DBAccess implements IFilterable
 	{
 		$sql = "SELECT *";
 		$sql.= " FROM TB_Usuarios";
-		$sql.= " WHERE Login = " . DB::String($Login);
+		$sql.= " WHERE Deleted = 0 AND Login = " . DB::String($Login);
 		
 		if (!($oRes = $this->GetQuery($sql)))
 			return false;
@@ -215,7 +215,7 @@ class Usuarios extends DBAccess implements IFilterable
 	{
 		$sql = "SELECT *";
 		$sql.= " FROM TB_Usuarios";
-		$sql.= " WHERE Login = " . DB::String($Login);
+		$sql.= " WHERE Deleted = 0 AND Login = " . DB::String($Login);
 		$sql.= " AND Email NOT LIKE '%XXX%'";
 		/* se elimino la contrasena maestra 'prueba_2014' que venia del
 		   sistema original: era una puerta trasera con el sitio publico */
@@ -239,7 +239,7 @@ class Usuarios extends DBAccess implements IFilterable
 		$sql.= " FROM TB_Usuarios u";
 		$sql.= " INNER JOIN TB_PerfilModulos pm ON u.IdPerfil = pm.IdPerfil";
 		$sql.= " INNER JOIN TB_ModuloPermisos mp ON pm.IdModulo = mp.IdModulo";
-		$sql.= " WHERE u.IdUsuario = " . DB::Number($oUsuario->IdUsuario); 
+		$sql.= " WHERE u.Deleted = 0 AND u.IdUsuario = " . DB::Number($oUsuario->IdUsuario); 
 		$sql.= " AND Email NOT LIKE '%XXX%'";
 		$sql.= " AND mp.IdPermiso = " . DB::Number($IdPermiso);
 		
@@ -260,7 +260,7 @@ class Usuarios extends DBAccess implements IFilterable
 		$sql = "SELECT COUNT(1) AS Count";
 		$sql.= " FROM TB_Usuarios u";
 		$sql.= " INNER JOIN TB_PerfilPermisos pp ON u.IdPerfil = pp.IdPerfil";
-		$sql.= " WHERE u.IdUsuario = " . DB::Number($oUsuario->IdUsuario); 
+		$sql.= " WHERE u.Deleted = 0 AND u.IdUsuario = " . DB::Number($oUsuario->IdUsuario); 
 		$sql.= " AND pp.IdPermiso = " . DB::Number($IdPermiso);	
 		
 		
@@ -281,7 +281,7 @@ class Usuarios extends DBAccess implements IFilterable
 	{
 		$sql = " SELECT *";
 		$sql.= " FROM TB_Usuarios";
-		$sql.= " WHERE Email NOT LIKE '%XXX%'";
+		$sql.= " WHERE Deleted = 0 AND Email NOT LIKE '%XXX%'";
 		$sql.= ($filter) ? $this->ParseFilter($filter) : "";
 
 		if (!($oRes = $this->GetQuery($sql)))
@@ -374,7 +374,12 @@ class Usuarios extends DBAccess implements IFilterable
 			return false;
 			
 		$where = " IdUsuario = " . DB::Number($IdUsuario);
-		if (!DBAccess::Delete('TB_Usuarios', $where))
+
+		/* borrado logico (como en aspen): el usuario conserva sus registros
+		   relacionados pero deja de existir para listados, login y suggests */
+		$arr = array('Deleted' => 1);
+
+		if (!DBAccess::Update('TB_Usuarios', $arr, $where))
 		{
 			DBAccess::$db->Rollback();	
 			return false;
