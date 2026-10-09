@@ -44,9 +44,8 @@ class Usuario
 	
 	public function CanDelete()
 	{
-		if ($this->GetAllMinutas())
-			return false;
-		
+		/* con el borrado logico (Deleted = 1) los registros relacionados no se
+		   tocan, asi que un usuario con minutas tambien se puede eliminar */
 		return true;
 	}
 	
