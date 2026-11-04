@@ -46,6 +46,8 @@ class ConfiguracionFactura
 	const PuntoVentaPV = 4;
 	
 	const LeyendaMonotributo = "El crédito fiscal discriminado en el presente comprobante, sólo podrá ser computado a efectos del Régimen de Sostenimiento e Inclusión Fiscal para Contribuyentes de la Ley Nº 27.618’.";
+	/* el texto vive como linea fija en las plantillas factura.csv y facturaunidad.csv */
+	const LeyendaOrientacionConsumidor = "Orientaci�n al Consumidor Provincia de Buenos Aires - L�nea 148 (Resoluci�n 386/2026)";
 }
 
 ?>
