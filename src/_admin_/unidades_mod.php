@@ -112,7 +112,7 @@ if ($Submit)
 		$err |= 128;
 	if ($IdEstado == '')
 		$err |= 256;
-	if ($IdEstado != $oUnidad->IdEstado && $IdEstado == EstadoUnidad::ListoFacturar && $currentUser->IdUsuario != 27 && $currentUser->IdUsuario != 7 && $currentUser->IdUsuario != 16 && $currentUser->IdUsuario != 1)
+	if ($IdEstado != $oUnidad->IdEstado && $IdEstado == EstadoUnidad::ListoFacturar && $currentUser->IdUsuario != 27 && $currentUser->IdUsuario != 7 && $currentUser->IdUsuario != 16 && $currentUser->IdUsuario != 1 && $currentUser->IdUsuario != 66)
 		$err |= 256;
 		
 	if ($IdColor == '')

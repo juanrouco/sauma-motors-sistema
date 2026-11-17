@@ -38,7 +38,7 @@ class Config
 	/*------------------------ Configuracion Base de Datos -----------------------*/
 	
 	/* Host para la conexi�n a la base de datos */
-	const Database_Host	= 'db';
+	const Database_Host	= 'localhost';
 	/* Nombre de usuario para conectarse a la base de datos */	
 	const Database_User	= 'root';	
 	/* Contrase�a para conectarse a la base de datos */		
