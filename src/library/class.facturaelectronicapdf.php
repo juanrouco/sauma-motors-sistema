@@ -219,6 +219,10 @@ class FacturaElectronicaPDF
 		$ok = $this->PyFEPDF->AgregarDato("ClienteProvincia", $oCliente->GetProvincia());
 		$ok = $this->PyFEPDF->AgregarDato("ClienteTelefono", $oCliente->GetTelefono());
 
+		/* la leyenda de Orientacion al Consumidor (Res. 386/2026) es una linea
+		   fija de las plantillas factura.csv y facturaunidad.csv, sale siempre.
+		   Aca va solo la de monotributo, en los campos Comentarios. Ojo:
+		   factura.csv no tiene campos Comentarios. */
 		if ($oCliente->IdTipoIva == TipoIva::MO)
 		{
 			$Comentarios = wordwrap(utf8_decode(ConfiguracionFactura::LeyendaMonotributo), 80, '\n');
